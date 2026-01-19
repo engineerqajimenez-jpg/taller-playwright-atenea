@@ -1,0 +1,22 @@
+{
+  "name": "taller-playwright-atenea",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/engineerqajimenez-jpg/taller-playwright-atenea#readme",
+  "bugs": {
+    "url": "https://github.com/engineerqajimenez-jpg/taller-playwright-atenea/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/engineerqajimenez-jpg/taller-playwright-atenea.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {},
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.8"
+  }
+}
