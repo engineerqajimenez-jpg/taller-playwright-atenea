@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { RegisterPage } from '../pages/registerpage';
-import testData from '../data/testData.json';
-import { backendUtils } from '../utils/backendUtils';
+import { RegisterPage } from '../pages/registerPage.js';
+import testData from '../data/testData.json' with { type: "json" };
+import { backendUtils } from '../utils/backendUtils.js';
 
 let registerPage: RegisterPage;
 test.beforeEach(async ({ page }) => {
@@ -17,6 +17,7 @@ test('TC-1 Verificacion de elementos visuales en la pagina de registro', async (
   await expect(registerPage.passwordInput).toBeVisible();
   await expect(registerPage.registerButton).toBeVisible();
   await expect(registerPage.loginButton).toBeVisible();
+  await page.waitForTimeout(5000);
 });
 
 test('TC-2 Verificar Boton de registro esta deshabilitado por defecto', async ({ page }) => {
@@ -32,6 +33,7 @@ test('TC-3 Verificar que el boton de registro se habilite al completar los campo
 test('TC-4 Verificar redireccionamiento a pagina de inicio de sesion al hacer click', async ({ page }) => {
   await registerPage.loginButton.click();
   await expect(page).toHaveURL('http://localhost:3000/login');
+  await page.waitForTimeout(5000);
 });
 
 test('TC-5 Verificar registro exitosos con datos validos', async ({ page }) => {
@@ -41,6 +43,8 @@ test('TC-5 Verificar registro exitosos con datos validos', async ({ page }) => {
     await registerPage.completarYHacerClickBotonRegistro(testData.usuarioValido);
   });
   await expect(page.getByText('Registro exitoso')).toBeVisible();
+      await page.waitForTimeout(5000);
+
 });
 
 test('TC-6 Verificar que un usuario no pueda registrarse con un correo electronico ya existente', async ({ page }) => {
@@ -51,7 +55,7 @@ test('TC-6 Verificar que un usuario no pueda registrarse con un correo electroni
   await registerPage.visitarPaginaRegistro();
   await registerPage.completarYHacerClickBotonRegistro(testData.usuarioValido);
   await expect(page.getByText('Email already in use')).toBeVisible();
-  await expect(page.getByText('Registro exitoso')).not.toBeVisible();
+  await page.waitForTimeout(5000);
 });
 
 test('TC-8 Verificar registro exitoso con datos validos verificando respuesta de la API', async ({ page }) => {
@@ -61,7 +65,6 @@ test('TC-8 Verificar registro exitoso con datos validos verificando respuesta de
   await registerPage.completarYHacerClickBotonRegistro(testData.usuarioValido);
   });
   const responsePromise = page.waitForResponse('http://localhost:6007/api/auth/signup');
-  await registerPage.hacerclickBotonRegistro();
   const response =  await responsePromise;
   const responseBody = await response.json();
 

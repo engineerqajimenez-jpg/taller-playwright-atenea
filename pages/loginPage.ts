@@ -28,7 +28,7 @@ export class LoginPage {
   }
 
   async completarYHacerClickBotonLogin(usuario: {email: string; password: string;}) {
-    this.completarFormularioLogin(usuario);
+    await this.completarFormularioLogin(usuario);
     await this.hacerclickBotonLogin();
   }
 }

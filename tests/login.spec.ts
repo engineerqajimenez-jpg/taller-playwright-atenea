@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/loginPage';
-import TestData from '../data/testData.json';
-import { DashboardPage } from '../pages/dashboardPage';
+import { LoginPage } from '../pages/loginPage.js';
+import TestData from '../data/testData.json' with { type: 'json' };
+import { DashboardPage } from '../pages/dashboardPage.js';
+import { backendUtils } from '../utils/backendUtils.js';
 
 let loginPage: LoginPage;  
 let dashboardPage: DashboardPage;
@@ -16,24 +17,14 @@ test.beforeEach(async ({ page }) => {
 test('TC-7 Verificar login exitoso', async ({ page }) => {
   const responsePromiseLogin = page.waitForResponse('http://localhost:6007/api/auth/login')
   await loginPage.completarYHacerClickBotonLogin({email: TestData.usuarioValido.email, password: TestData.usuarioValido.password});
-  await loginPage.hacerclickBotonLogin();
+  await expect(dashboardPage.dashboardTitle).toBeVisible();
 });
 
 test('TC-11 Loguearse con un nuevo usuario creado por backend', async ({ page, request}) => {
-  const email = TestData.usuarioValido.email.split('@')[0] + Date.now().toString() + '@email.com' + TestData.usuarioValido.email.split('@')[1];
-  const response = await request.post('http://localhost:6007/api/auth/signup', {
-    data: {
-      firstName: TestData.usuarioValido.firstName,
-      lastName: TestData.usuarioValido.lastName,
-      email: email,
-      password: TestData.usuarioValido.password
-    }
-  });
-  expect(response.status()).toBe(201);
+  const nuevoUsuario = await backendUtils.crearUsuarioPorApi(request, TestData.usuarioValido);
 
   const responsePromiseLogin = page.waitForResponse('http://localhost:6007/api/auth/login')
-  await loginPage.completarYHacerClickBotonLogin({email: email, password: TestData.usuarioValido.password});
-  await loginPage.hacerclickBotonLogin();
+  await loginPage.completarYHacerClickBotonLogin({email: nuevoUsuario.email, password: nuevoUsuario.password});
   const responseLogin =  await responsePromiseLogin;
   const responseBodyLoginJson = await responseLogin.json();
 
@@ -45,6 +36,6 @@ test('TC-11 Loguearse con un nuevo usuario creado por backend', async ({ page, r
     id: expect.any(String),
     firstName: TestData.usuarioValido.firstName,
     lastName: TestData.usuarioValido.lastName,
-    email: email, 
+    email: nuevoUsuario.email, 
   }));
 });
