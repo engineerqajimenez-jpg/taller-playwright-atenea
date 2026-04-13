@@ -60,3 +60,7 @@ jobs:
 
     - name: Esperar a que el frontend esté disponible
       run: wait-on http://localhost:3000
+    - name: Ejecutar tests 
+      run: |
+        cd app/frontend
+        npm run test
