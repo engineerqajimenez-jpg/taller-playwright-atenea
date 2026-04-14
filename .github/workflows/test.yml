@@ -32,6 +32,7 @@ jobs:
 
     - name: Crear archivos .env para el backend 
       run: |
+       mkdir -p redux-athena-bank/backend
         echo "MONGO_URI=${{ env.MONGO_URI }}" >> redux-athena-bank/backend/.env
         echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> redux-athena-bank/backend/.env
         echo "PORT=${{ env.PORT }}" >> redux-athena-bank/backend/.env
