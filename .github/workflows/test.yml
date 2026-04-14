@@ -45,14 +45,18 @@ jobs:
 
     - name: Construir backend
       run: |
-        cd app/backend
-        npm run dev > backend.log 2>&1 &
+         cd app/backend
+         nohup npm run dev > backend.log 2>&1 &
 
     - name: Instalar wait-on
       run: npm install -g wait-on
 
     - name: Esperar a que el backend esté disponible
-      run: wait-on tcp:6007   
+      run: npx wait-on tcp:6007 --timeout 60000 # Máximo 1 minuto
+
+    - name: Ver logs si el backend falla
+      if: failure()
+      run: cat app/backend/backend.log
 
     - name: Instalar dependencias del frontend
       run: |
