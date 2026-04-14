@@ -26,44 +26,41 @@ jobs:
     - name: Checkout repo actual (con el workflow)
       uses: actions/checkout@v3
 
-    - name: Crear archivos .env para el backend
+    - name: Clonar repo Athena Reux Bank 
       run: |
-        # Buscamos la carpeta 'backend' sin importar dónde esté parada
-        BACKEND_DIR=$(find . -name "backend" -type d | head -n 1)
-        echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $BACKEND_DIR/.env
-        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $BACKEND_DIR/.env
-        echo "PORT=6007" >> $BACKEND_DIR/.env
+        git clone https://github.com/engineerqajimenez-jpg/taller-playwright-atenea.git app
+
+    - name: Crear archivos .env para el backend 
+      run: |
+        echo "MONGO_URI=${{ env.MONGO_URI }}" >> app/backend/.env
+        echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> app/backend/.env
+        echo "PORT=${{ env.PORT }}" >> app/backend/.env
+        echo "VITE_API_URL=${{ env.VITE_API_URL }}" >> app/backend/.env
 
     - name: Instalar dependencias de backend
       run: |
-        cd redux-athena-bank/backend
+        cd app/backend
         npm install
 
     - name: Construir backend
       run: |
-        cd redux-athena-bank/backend
-        # Usamos node directo para evitar problemas de permisos de npm
-        nohup node src/server.js > backend.log 2>&1 &
-        sleep 20
+        cd app/backend
+        npm run dev > backend.log 2>&1 &
 
     - name: Instalar wait-on
       run: npm install -g wait-on
 
     - name: Esperar a que el backend esté disponible
-      run: npx wait-on tcp:6007 --timeout 60000 # Máximo 1 minuto
-
-    - name: Ver logs si el backend falla
-      if: failure()
-      run: cat redux-athena-bank/backend/backend.log
+      run: wait-on tcp:6007   
 
     - name: Instalar dependencias del frontend
       run: |
-        cd redux-athena-bank/frontend
+        cd app/frontend
         npm install
 
     - name: Esperar a que el frontend esté disponible
       run: wait-on http://localhost:3000
     - name: Ejecutar tests 
       run: |
-        cd redux-athena-bank/frontend
+        cd app/frontend
         npm run test
