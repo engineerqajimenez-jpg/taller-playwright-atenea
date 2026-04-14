@@ -45,8 +45,10 @@ jobs:
 
     - name: Construir backend
       run: |
-         cd redux-athena-bank/backend
-         nohup npm run dev > backend.log 2>&1 &
+        cd redux-athena-bank/backend
+        # Usamos "start" porque es el que existe en tu package.json
+        nohup npm run start > backend.log 2>&1 &
+        sleep 10
 
     - name: Instalar wait-on
       run: npm install -g wait-on
