@@ -28,11 +28,11 @@ jobs:
 
     - name: Crear archivos .env para el backend
       run: |
-          mkdir -p redux-athena-bank/backend 
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> redux-athena-bank/backend/.env 
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> redux-athena-bank/backend/.env 
-          echo "PORT=${{ env.PORT }}" >> redux-athena-bank/backend/.env 
-          echo "VITE_API_URL=${{ env.VITE_API_URL }}" >> redux-athena-bank/backend/.env 
+        # Buscamos la carpeta 'backend' sin importar dónde esté parada
+        BACKEND_DIR=$(find . -name "backend" -type d | head -n 1)
+        echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $BACKEND_DIR/.env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $BACKEND_DIR/.env
+        echo "PORT=6007" >> $BACKEND_DIR/.env
 
     - name: Instalar dependencias de backend
       run: |
@@ -41,10 +41,12 @@ jobs:
 
     - name: Construir backend
       run: |
-        cd redux-athena-bank/backend
-        # Forzamos la ejecución directa del archivo si npm falla
+        BACKEND_DIR=$(find . -name "backend" -type d | head -n 1)
+        cd $BACKEND_DIR
+        npm install
+        # Ejecutamos con la ruta relativa desde aquí
         nohup node src/server.js > backend.log 2>&1 &
-        sleep 15
+        sleep 20 # Esperamos un poco para asegurarnos de que el backend se inicie
 
     - name: Instalar wait-on
       run: npm install -g wait-on
