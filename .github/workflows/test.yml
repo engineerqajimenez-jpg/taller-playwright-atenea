@@ -33,19 +33,19 @@ jobs:
     - name: Crear archivos .env para el backend
       run: |
           mkdir -p app/backend
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> app/backend/.env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> app/backend/.env
-          echo "PORT=${{ env.PORT }}" >> app/backend/.env
-          echo "VITE_API_URL=${{ env.VITE_API_URL }}" >> app/backend/.env
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> redux-athena-bank/backend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> redux-athena-bank/backend/.env
+          echo "PORT=${{ env.PORT }}" >> redux-athena-bank/backend/.env
+          echo "VITE_API_URL=${{ env.VITE_API_URL }}" >> redux-athena-bank/backend/.env
 
     - name: Instalar dependencias de backend
       run: |
-        cd app/backend
+        cd redux-athena-bank/backend
         npm install
 
     - name: Construir backend
       run: |
-         cd app/backend
+         cd redux-athena-bank/backend
          nohup npm run dev > backend.log 2>&1 &
 
     - name: Instalar wait-on
@@ -56,16 +56,16 @@ jobs:
 
     - name: Ver logs si el backend falla
       if: failure()
-      run: cat app/backend/backend.log
+      run: cat redux-athena-bank/backend/backend.log
 
     - name: Instalar dependencias del frontend
       run: |
-        cd app/frontend
+        cd redux-athena-bank/frontend
         npm install
 
     - name: Esperar a que el frontend esté disponible
       run: wait-on http://localhost:3000
     - name: Ejecutar tests 
       run: |
-        cd app/frontend
+        cd redux-athena-bank/frontend
         npm run test
