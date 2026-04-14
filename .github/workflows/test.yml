@@ -41,12 +41,10 @@ jobs:
 
     - name: Construir backend
       run: |
-        BACKEND_DIR=$(find . -name "backend" -type d | head -n 1)
-        cd $BACKEND_DIR
-        npm install
-        # Ejecutamos con la ruta relativa desde aquí
+        cd redux-athena-bank/backend
+        # Usamos node directo para evitar problemas de permisos de npm
         nohup node src/server.js > backend.log 2>&1 &
-        sleep 20 # Esperamos un poco para asegurarnos de que el backend se inicie
+        sleep 20
 
     - name: Instalar wait-on
       run: npm install -g wait-on
