@@ -32,19 +32,19 @@ jobs:
 
     - name: Crear archivos .env para el backend 
       run: |
-        echo "MONGO_URI=${{ env.MONGO_URI }}" >> /backend/.env
-        echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> /backend/.env
-        echo "PORT=${{ env.PORT }}" >> /backend/.env
-        echo "VITE_API_URL=${{ env.VITE_API_URL }}" >> /backend/.env
+        echo "MONGO_URI=${{ env.MONGO_URI }}" >> redux-athena-bank/backend/.env
+        echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> redux-athena-bank/backend/.env
+        echo "PORT=${{ env.PORT }}" >> redux-athena-bank/backend/.env
+        echo "VITE_API_URL=${{ env.VITE_API_URL }}" >> redux-athena-bank/backend/.env
 
     - name: Instalar dependencias de backend
       run: |
-        cd redux-bank/backend
+        cd redux-athena-bank/backend
         npm install
 
     - name: Construir backend
       run: |
-        cd redux-bank/backend
+        cd redux-athena-bank/backend
         npm run dev > backend.log 2>&1 &
 
     - name: Instalar wait-on
