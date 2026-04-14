@@ -28,7 +28,7 @@ jobs:
 
     - name: Clonar repo Athena Reux Bank 
       run: |
-        git clone https://github.com/engineerqajimenez-jpg/taller-playwright-atenea.git app
+        git clone https://github.com/engineerqajimenez-jpg/taller-playwright-atenea.git
 
     - name: Crear archivos .env para el backend
       run: |
@@ -40,12 +40,12 @@ jobs:
 
     - name: Instalar dependencias de backend
       run: |
-        cd backend || cd redux-athena-bank/backend
+        cd redux-athena-bank/backend
         npm install
 
     - name: Construir backend
       run: |
-        cd backend || cd redux-athena-bank/backend
+        cd redux-athena-bank/backend
         # Forzamos la ejecución directa del archivo si npm falla
         nohup node src/server.js > backend.log 2>&1 &
         sleep 15
