@@ -26,10 +26,6 @@ jobs:
     - name: Checkout repo actual (con el workflow)
       uses: actions/checkout@v3
 
-    - name: Clonar repo Athena Reux Bank 
-      run: |
-        git clone https://github.com/engineerqajimenez-jpg/taller-playwright-atenea.git
-
     - name: Crear archivos .env para el backend
       run: |
           mkdir -p redux-athena-bank/backend 
