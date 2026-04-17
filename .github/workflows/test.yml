@@ -1,6 +1,6 @@
 name: CI - clonando App y ejecutando tests
 
-on: 
+on:
   push:
     branches: [ main ]
   pull_request:
@@ -9,59 +9,67 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     services:
       mongo:
         image: mongo:6.0
         ports:
           - 27017:27017
-        
+
     env:
       MONGO_URI: ${{ secrets.MONGO_URI }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       PORT: 6007
       VITE_API_URL: http://localhost:6007/api
- 
+
     steps:
-    - name: Checkout repo actual (con el workflow)
-      uses: actions/checkout@v3
+    - name: Checkout repo de tests
+      uses: actions/checkout@v4
 
-    - name: Clonar repo Athena Reux Bank 
+    - name: Clonar app Redux Athena Bank
       run: |
-        git clone https://github.com/engineerqajimenez-jpg/taller-playwright-atenea.git 
+        git clone https://github.com/Atenea-Conocimientos/redux-athena-bank.git redux-athena-bank
 
-    - name: Crear archivos .env para el backend 
+    - name: Crear .env para el backend
       run: |
-       mkdir -p redux-athena-bank/backend
-        echo "MONGO_URI=${{ env.MONGO_URI }}" >> redux-athena-bank/backend/.env
-        echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> redux-athena-bank/backend/.env
-        echo "PORT=${{ env.PORT }}" >> redux-athena-bank/backend/.env
-        echo "VITE_API_URL=${{ env.VITE_API_URL }}" >> redux-athena-bank/backend/.env
+        cat > redux-athena-bank/backend/.env << EOF
+        MONGO_URI=${{ env.MONGO_URI }}
+        JWT_SECRET=${{ env.JWT_SECRET }}
+        PORT=${{ env.PORT }}
+        VITE_API_URL=${{ env.VITE_API_URL }}
+        EOF
 
-    - name: Instalar dependencias de backend
+    - name: Instalar y levantar backend
       run: |
         cd redux-athena-bank/backend
         npm install
+        npm start > backend.log 2>&1 &
 
-    - name: Construir backend
+    - name: Esperar backend (puerto 6007)
+      run: npx wait-on tcp:6007 --timeout 60000
+
+    - name: Instalar y levantar frontend
       run: |
-        cd redux-athena-bank/backend
-        npm run dev > backend.log 2>&1 &
-
-    - name: Instalar wait-on
-      run: npm install -g wait-on
-
-    - name: Esperar a que el backend esté disponible
-      run: wait-on tcp:6007   
-
-    - name: Instalar dependencias del frontend
-      run: |
-        cd redux-bank/app/frontend
+        cd redux-athena-bank/frontend
         npm install
+        npm run dev > frontend.log 2>&1 &
 
-    - name: Esperar a que el frontend esté disponible
-      run: wait-on http://localhost:3000
-    - name: Ejecutar tests 
-      run: |
-        cd app/frontend
-        npm run test
+    - name: Esperar frontend (puerto 3000)
+      run: npx wait-on http-get://localhost:3000 --timeout 60000
+
+    - name: Instalar dependencias de Playwright
+      run: npm ci
+
+    - name: Instalar browsers de Playwright
+      run: npx playwright install --with-deps chromium
+
+    - name: Ejecutar tests
+      run: npx playwright test
+
+    - name: Subir reporte HTML si falla
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: playwright-report/
