@@ -44,6 +44,15 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], },
       dependencies: ['setup'],
     },
+    {
+    name: 'setup',
+    testMatch: /.*\.setup\.ts/,
+    },
+    {
+    name: 'chromium',
+    use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/usuarioEnvia.json' },
+    dependencies: ['setup'], // Esto es lo clave
+    },
 //
   //  {
   //    name: 'firefox',
