@@ -67,6 +67,9 @@ jobs:
       run: npx playwright install --with-deps chromium
 
     - name: Ejecutar tests
+      env:
+        USER_ENVIA_EMAIL: ${{ secrets.USER_ENVIA_EMAIL }}
+        USER_ENVIA_PASS: ${{ secrets.USER_ENVIA_PASS }}
       run: npx playwright test
 
     - name: Subir reporte HTML si falla
