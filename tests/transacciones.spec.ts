@@ -11,7 +11,7 @@ let modalEnviarTransferencia: ModalEnviarTransferencia;
 const require = createRequire(import.meta.url);
 
 const testUsuarioEnvia= test.extend({
-    storageState: require.resolve('../playwright/.auth/usuarioEnvia.json')
+storageState: 'playwright/.auth/usuarioEnvia.json'
 })
 
 const testUsuarioRecibe= test.extend({
