@@ -44,7 +44,9 @@ jobs:
       run: |
         cd redux-athena-bank/backend
         npm install
-        npm start > backend.log 2>&1 &
+        # El '&' al final es vital para que corra en segundo plano
+        nohup node src/server.js > backend.log 2>&1 &
+        sleep 10
 
     - name: Esperar backend (puerto 6007)
       run: npx wait-on tcp:6007 --timeout 60000
@@ -59,7 +61,7 @@ jobs:
       run: npx wait-on http-get://localhost:3000 --timeout 60000
 
     - name: Instalar dependencias de Playwright
-      run: npm ci
+      run: npm install
 
     - name: Instalar browsers de Playwright
       run: npx playwright install --with-deps chromium
