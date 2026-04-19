@@ -15,7 +15,7 @@ storageState: 'playwright/.auth/usuarioEnvia.json'
 })
 
 const testUsuarioRecibe= test.extend({
-    storageState: require.resolve('../playwright/.auth/usuarioRecibe.json')
+storageState: 'playwright/.auth/usuarioRecibe.json'
 })
 
 test.beforeEach(async ({ page }) => {
