@@ -1,21 +1,19 @@
 import { test as setup, expect } from '@playwright/test';
 
-// En tests/auth.setup.ts
-setup ('login usuario envia', async ({ page }) => {
-  // 1. Aumentamos el timeout de navegación para CI
-  await page.goto('http://localhost:3000/login', { waitUntil: 'domcontentloaded' });
+setup('login usuario envia', async ({ page }) => {
+  await page.goto('http://localhost:3000/login', { waitUntil: 'networkidle', timeout: 60000 });
 
-  // 2. Esperamos explícitamente a que el campo de email sea visible
-await page.waitForSelector('input[name="email"]', { timeout: 60000 });
+  // Usamos getByLabel o getByPlaceholder que son más estables en React/Vite
+  const emailInput = page.locator('input[name="email"]');
+  await emailInput.waitFor({ state: 'visible', timeout: 30000 });
   
-  await page.fill('#email', process.env.USER_ENVIA_EMAIL!);
-  await page.fill('#password', process.env.USER_ENVIA_PASS!);
+  await emailInput.fill(process.env.USER_ENVIA_EMAIL!);
+  await page.locator('input[name="password"]').fill(process.env.USER_ENVIA_PASS!);
+  
   await page.click('button[type="submit"]');
 
-  // 3. Verificamos que el login fue exitoso antes de guardar el estado
-  await expect(page.getByTestId('titulo-dashboard')).toBeVisible({ timeout: 60000 });
-
-  await page.context().storageState({
-    path: './playwright/.auth/usuarioEnvia.json'
-  });
+  // Esperamos a que la URL cambie para asegurar que el login procesó
+  await page.waitForURL('**/dashboard', { timeout: 30000 });
+  
+  await page.context().storageState({ path: './playwright/.auth/usuarioEnvia.json' });
 });

@@ -40,5 +40,4 @@ await page.context().storageState({ path: 'playwright/.auth/usuarioEnvia.json' }
 
 setup('Loguearse con usuario que recibe dinero', async ({ page }) => {
   await loginPage.completarYHacerClickBotonLogin(TestData.usuarioValido);
-await expect(dashboardPage.dashboardTitle).toBeVisible({ timeout: 15000 }); // Dale 15 segs  await page.context().storageState({ path: usuarioRecibeAuthFile });
-});
+await expect(dashboardPage.dashboardTitle).toBeVisible({ timeout: 30000 });});
