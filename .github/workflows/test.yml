@@ -58,7 +58,7 @@ jobs:
         npm run dev > frontend.log 2>&1 &
 
     - name: Esperar frontend (puerto 3000)
-      run: npx wait-on http-get://localhost:3000 --timeout 60000
+      run: npx wait-on http-get://localhost:3000 --timeout 90000
 
     - name: Instalar dependencias de Playwright
       run: npm install
@@ -70,6 +70,7 @@ jobs:
       env:
         USER_ENVIA_EMAIL: ${{ secrets.USER_ENVIA_EMAIL }}
         USER_ENVIA_PASS: ${{ secrets.USER_ENVIA_PASS }}
+        MONGO_URI: ${{ secrets.MONGO_URI }}
       run: npx playwright test
 
     - name: Subir reporte HTML si falla
