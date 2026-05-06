@@ -1,12 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// --- ESTE BLOQUE REEMPLAZA EL USO DE __dirname ---
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Ahora sí podemos usar __dirname para cargar el .env
 dotenv.config({ path: path.resolve(__dirname, '.env') });
+// -------------------------------------------------
 
 /**
  * See https://playwright.dev/docs/test-configuration.
