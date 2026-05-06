@@ -15,4 +15,4 @@ setup('login usuario envia', async ({ page }) => {
   await page.waitForURL('**/dashboard', { timeout: 30000 });
 
   await page.context().storageState({ path: './playwright/.auth/usuarioEnvia.json' });
-});
+}); 
