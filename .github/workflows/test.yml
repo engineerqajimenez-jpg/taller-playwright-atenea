@@ -52,13 +52,17 @@ jobs:
       run: npx wait-on tcp:6007 --timeout 60000
 
     - name: Instalar y levantar frontend
+      env:
+        # Esto le dice al React/Vite dónde está el servidor de Node
+        VITE_API_URL: http://localhost:6007/api
       run: |
         cd redux-athena-bank/frontend
         npm install
-        npm run dev > frontend.log 2>&1 &
+        # Usamos 'nohup' y '&' para que no bloquee el pipeline
+        nohup npm run dev -- --port 3000 > frontend.log 2>&1 &
 
     - name: Esperar frontend (puerto 3000)
-      run: npx wait-on http-get://localhost:3000 --timeout 90000
+      run: npx wait-on http://localhost:3000 --timeout 90000
 
     - name: Instalar dependencias de Playwright
       run: npm install
