@@ -70,11 +70,11 @@ jobs:
     - name: Instalar browsers de Playwright
       run: npx playwright install --with-deps chromium
 
-    - name: Ejecutar tests
+    - name: Run Playwright tests
       env:
+        # Esto conecta los Secrets de GitHub con tu código
         USER_ENVIA_EMAIL: ${{ secrets.USER_ENVIA_EMAIL }}
         USER_ENVIA_PASS: ${{ secrets.USER_ENVIA_PASS }}
-        MONGO_URI: ${{ secrets.MONGO_URI }}
       run: npx playwright test
 
     - name: Subir reporte HTML si falla

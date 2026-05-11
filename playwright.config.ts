@@ -39,7 +39,7 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'setup',
+      name: 'setup - registro',
       testMatch: 'registro.setup.ts',
       
     },
@@ -49,7 +49,7 @@ export default defineConfig({
       dependencies: ['setup'],
     },
     {
-    name: 'setup-login',
+    name: 'setup',
     testMatch: /.*\.setup\.ts/,
     },
     {
