@@ -102,7 +102,7 @@ await expect(dashboardPage.elementosListaTransferencia.first()).toContainText('T
 
 //Verificamos que se muestre el monto correcto.
 // Usamos unas expresion regular para buscar el numero (ej. 5.00)
-const regexMonto = new RegExp(String(montoAleatorio.toFixed(2)));
+const regexMonto = new RegExp(montoAleatorio.toFixed(2));
 await expect(dashboardPage.elementosListamontoTransferencia.first()).toContainText(regexMonto);
 
 await page.waitForTimeout(5000); // Esperamos un poco para poder ver el resultado antes de cerrar el navegador
