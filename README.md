@@ -6,7 +6,7 @@
 End-to-end test automation suite for **Redux Athena Bank**, a full-stack banking application. Built with **Playwright** and **TypeScript**, featuring CI/CD integration with GitHub Actions and automated report publishing via GitHub Pages.
 
 ### 🔗 Live Test Report
-👉 [View Latest Playwright Report](https://engineerqajimenez-jpg.github.io/taller-playwright-atenea/report-51/)
+👉 [Ver Último Reporte de Playwright](https://engineerqajimenez-jpg.github.io/taller-playwright-atenea/)
 
 ### ✅ Test Coverage — 16 Test Cases
 | File | Test Cases |
@@ -45,7 +45,7 @@ Every push to `main` automatically:
 Suite de automatización end-to-end para **Redux Athena Bank**, una aplicación bancaria full-stack. Desarrollada con **Playwright** y **TypeScript**, con integración CI/CD en GitHub Actions y publicación automática de reportes en GitHub Pages.
 
 ### 🔗 Reporte en Vivo
-👉 [Ver Último Reporte de Playwright](https://engineerqajimenez-jpg.github.io/taller-playwright-atenea/report-51/)
+👉 [Ver Último Reporte de Playwright](https://engineerqajimenez-jpg.github.io/taller-playwright-atenea/)
 
 ### ✅ Cobertura — 16 Casos de Prueba
 | Archivo | Casos de Prueba |
@@ -78,4 +78,4 @@ Cada push a `main` automáticamente:
 
 ---
 
-**Author / Autor:** Jose Jimenez — [LinkedIn](https://www.linkedin.com/in/jose-jimenez-qa) | [GitHub](https://github.com/engineerqajimenez-jpg)
+**Author / Autor:** Jose Jimenez — [LinkedIn](https://www.linkedin.com/in/josejimenez07/) | [GitHub](https://github.com/engineerqajimenez-jpg)
