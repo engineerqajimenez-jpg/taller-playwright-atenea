@@ -74,6 +74,8 @@ const cuentas = await respuestaDeCuentas.json();
 expect(cuentas.length, 'El usuario que envia dinero no tiene cuentas disponibles').toBeGreaterThan(0) 
 const idCuentaOrigen  = cuentas[0]._id; // Tomamos la primera cuenta disponible del usuario que envia dinero
 
+const emailDestinatario = JSON.parse(await fs.readFile(require.resolve('../playwright/.auth/usuarioRecibe.data.json'), 'utf-8')).email;
+
 const montoAleatorio = Math.floor(Math.random() * 100) + 1; // Monto aleatorio entre 1 y 100
 console.log(`Enviando transferencia de $${montoAleatorio} desde la cuenta ${idCuentaOrigen} a ${datosDeUsuarioEnvia}`);
 
@@ -84,7 +86,7 @@ const respuestaTransferencia = await request.post('http://localhost:6007/api/tra
     },
     data: {
         fromAccountId: idCuentaOrigen,
-        toEmail: datosDeUsuarioEnvia,
+        toEmail: emailDestinatario,
         amount: montoAleatorio
     }
 });
