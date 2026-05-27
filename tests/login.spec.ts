@@ -14,9 +14,10 @@ test.beforeEach(async ({ page }) => {
 
 });
 
-test('TC-7 Verificar login exitoso', async ({ page }) => {
-  const responsePromiseLogin = page.waitForResponse('http://localhost:6007/api/auth/login')
-  await loginPage.completarYHacerClickBotonLogin({email: TestData.usuarioValido.email, password: TestData.usuarioValido.password});
+test('TC-7 Verificar login exitoso', async ({ page, request }) => {
+  const nuevoUsuario = await backendUtils.crearUsuarioPorApi(request, TestData.usuarioValido);
+  const responsePromiseLogin = page.waitForResponse('http://localhost:6007/api/auth/login');
+  await loginPage.completarYHacerClickBotonLogin({ email: nuevoUsuario.email, password: nuevoUsuario.password });
   await expect(dashboardPage.dashboardTitle).toBeVisible();
 });
 
