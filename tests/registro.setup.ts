@@ -45,5 +45,19 @@ setup('Loguearse con usuario que recibe dinero', async ({ page, request }) => {
   const nuevoUsuario = await backendUtils.crearUsuarioPorApi(request, TestData.usuarioRecibe);
   await loginPage.completarYHacerClickBotonLogin(nuevoUsuario);
   await expect(dashboardPage.dashboardTitle).toBeVisible({ timeout: 15000 });
+  
+  // Crear cuenta para poder recibir transferencias
+  await dashboardPage.botonDeAgregarCuenta.click();
+  await modalCrearCuenta.seleccionarTipoDeCuenta('Débito');
+  await modalCrearCuenta.ingresarMontoInicial('0');
+  await modalCrearCuenta.botonCrearCuenta.click();
+  await expect(page.getByText('¡Cuenta creada exitosamente!')).toBeVisible();
+
+  // Guardar email del usuario que recibe
+  await fs.writeFile(
+    path.resolve('playwright/.auth/usuarioRecibe.data.json'),
+    JSON.stringify({ email: nuevoUsuario.email })
+  );
+  
   await page.context().storageState({ path: usuarioRecibeAuthFile });
 });

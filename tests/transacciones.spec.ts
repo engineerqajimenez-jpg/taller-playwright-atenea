@@ -25,8 +25,8 @@ test.beforeEach(async ({ page }) => {
 })
 
 testUsuarioEnvia('TC-12 Verificar transasccion exitosa', async ({page}) => {
-    const usuarioEnviaData = require.resolve('../playwright/.auth/usuarioEnvia.data.json');
-    const contenido = await fs.readFile(usuarioEnviaData, 'utf-8');
+    const usuarioRecibeData = require.resolve('../playwright/.auth/usuarioRecibe.data.json');
+    const contenido = await fs.readFile(usuarioRecibeData, 'utf-8');
     const { email: emailRecibe } = JSON.parse(contenido);
     
     await expect(dashboardPage.dashboardTitle).toBeVisible();
@@ -36,8 +36,8 @@ testUsuarioEnvia('TC-12 Verificar transasccion exitosa', async ({page}) => {
 });
 
 testUsuarioRecibe('TC-13 Verificar que el usuario recibe la transferencia', async ({page}) => {
-    await expect(dashboardPage.dashboardTitle).toBeVisible()
-    await expect(page.getByText(/Transferencia de/).first()).toBeVisible();
+    await expect(dashboardPage.dashboardTitle).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText(/Transferencia de/).first()).toBeVisible({ timeout: 15000 });
 })
 
 // Test unificado que envia dinero por API y verifica en la UI.

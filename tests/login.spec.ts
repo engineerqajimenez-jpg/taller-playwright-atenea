@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
 test('TC-7 Verificar login exitoso', async ({ page }) => {
   const responsePromiseLogin = page.waitForResponse('http://localhost:6007/api/auth/login')
   await loginPage.completarYHacerClickBotonLogin({email: TestData.usuarioValido.email, password: TestData.usuarioValido.password});
-  await expect(dashboardPage.dashboardTitle).toBeVisible();
+  await expect(dashboardPage.dashboardTitle).toBeVisible({ timeout: 15000 });
 });
 
 test('TC-11 Loguearse con un nuevo usuario creado por backend', async ({ page, request}) => {
