@@ -74,7 +74,9 @@ jobs:
       env:
         USER_ENVIA_EMAIL: ${{ secrets.USER_ENVIA_EMAIL }}
         USER_ENVIA_PASS: ${{ secrets.USER_ENVIA_PASS }}
-      run: npx playwright test
+      run: |
+        npx playwright test --project=setup
+        npx playwright test --project=chromium
 
     - name: Subir reporte HTML si falla
       if: always()
