@@ -23,11 +23,7 @@ setup.beforeEach(async ({ page }) => {
 });
 
 setup('Generar usuario que envia dinero', async ({ page, request }) => {
-     const nuevoUsuario = await backendUtils.crearUsuarioPorApi(request, TestData.usuarioValido);
-
-// Guardar datos del usuario que envia dinero para uso en otros tests
-// Cambia lo que tengas en la línea 29 por esto:
-await page.context().storageState({ path: 'playwright/.auth/usuarioEnvia.json' });
+  const nuevoUsuario = await backendUtils.crearUsuarioPorApi(request, TestData.usuarioValido);
 
   await loginPage.completarYHacerClickBotonLogin(nuevoUsuario);
   await dashboardPage.botonDeAgregarCuenta.click();
@@ -35,6 +31,13 @@ await page.context().storageState({ path: 'playwright/.auth/usuarioEnvia.json' }
   await modalCrearCuenta.ingresarMontoInicial('1000');
   await modalCrearCuenta.botonCrearCuenta.click();
   await expect(page.getByText('¡Cuenta creada exitosamente!')).toBeVisible();
+  
+  // Guardar email del usuario que envia para usarlo en transacciones
+  await fs.writeFile(
+    path.resolve(usuarioEnviaDataFile),
+    JSON.stringify({ email: nuevoUsuario.email })
+  );
+  
   await page.context().storageState({ path: usuarioEnviaAuthFile });
 });
 
