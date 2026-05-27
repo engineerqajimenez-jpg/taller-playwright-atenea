@@ -25,15 +25,14 @@ test.beforeEach(async ({ page }) => {
 })
 
 testUsuarioEnvia('TC-12 Verificar transasccion exitosa', async ({page}) => {
-    testUsuarioEnvia.info().annotations.push({ 
-        type: 'Informaacion de usuario que recibe',
-        description: TestData.usuarioValido.email
-    });
-
+    const usuarioEnviaData = require.resolve('../playwright/.auth/usuarioEnvia.data.json');
+    const contenido = await fs.readFile(usuarioEnviaData, 'utf-8');
+    const { email: emailRecibe } = JSON.parse(contenido);
+    
     await expect(dashboardPage.dashboardTitle).toBeVisible();
     await dashboardPage.botonEnviarDinero.click();
-    await modalEnviarTransferencia.completarYHacerClickBotonEnviar(TestData.usuarioValido.email, '100')
-    await expect(page.getByText('Transferencia enviada a ' + TestData.usuarioValido.email)).toBeVisible();
+    await modalEnviarTransferencia.completarYHacerClickBotonEnviar(emailRecibe, '100')
+    await expect(page.getByText('Transferencia enviada a ' + emailRecibe)).toBeVisible();
 });
 
 testUsuarioRecibe('TC-13 Verificar que el usuario recibe la transferencia', async ({page}) => {
@@ -76,7 +75,7 @@ expect(cuentas.length, 'El usuario que envia dinero no tiene cuentas disponibles
 const idCuentaOrigen  = cuentas[0]._id; // Tomamos la primera cuenta disponible del usuario que envia dinero
 
 const montoAleatorio = Math.floor(Math.random() * 100) + 1; // Monto aleatorio entre 1 y 100
-console.log(`Enviando transferencia de $${montoAleatorio} desde la cuenta ${idCuentaOrigen} a ${TestData.usuarioValido.email}`);
+console.log(`Enviando transferencia de $${montoAleatorio} desde la cuenta ${idCuentaOrigen} a ${datosDeUsuarioEnvia}`);
 
 //ahora con todos los datos podemos enviar la transferencia de dinero de una cuenta a la otra 
 const respuestaTransferencia = await request.post('http://localhost:6007/api/transactions/transfer', {
@@ -85,7 +84,7 @@ const respuestaTransferencia = await request.post('http://localhost:6007/api/tra
     },
     data: {
         fromAccountId: idCuentaOrigen,
-        toEmail: TestData.usuarioValido.email,
+        toEmail: datosDeUsuarioEnvia,
         amount: montoAleatorio
     }
 });
@@ -99,7 +98,7 @@ await page.waitForLoadState('networkidle'); // Esperamos a que no haya más soli
 await expect(dashboardPage.dashboardTitle).toBeVisible(); // Verificamos que el dashboard se muestre correctamente;
 
 //Verificamos que se muestre el mail del remitente en la fila, en el primer lugar.
-await expect(dashboardPage.elementosListaTransferencia.first()).toContainText(/Transferencia de josegregorio\d*@email\.com/);
+await expect(dashboardPage.elementosListaTransferencia.first()).toContainText('Transferencia de ' + datosDeUsuarioEnvia);
 
 //Verificamos que se muestre el monto correcto.
 // Usamos unas expresion regular para buscar el numero (ej. 5.00)
