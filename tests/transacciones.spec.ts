@@ -31,15 +31,20 @@ testUsuarioRecibe.beforeEach(async ({ page }) => {
 });
 
 testUsuarioEnvia('TC-12 Verificar transasccion exitosa', async ({page}) => {
+    // Leer email del usuarioRecibe desde el archivo generado en setup
+    const usuarioRecibeData = require.resolve('../playwright/.auth/usuarioRecibe.data.json');
+    const contenido = await fs.readFile(usuarioRecibeData, 'utf-8');
+    const emailRecibe = JSON.parse(contenido).email;
+
     testUsuarioEnvia.info().annotations.push({ 
         type: 'Informaacion de usuario que recibe',
-        description: TestData.usuarioValido.email
+        description: emailRecibe
     });
 
     await expect(dashboardPage.dashboardTitle).toBeVisible();
     await dashboardPage.botonEnviarDinero.click();
-    await modalEnviarTransferencia.completarYHacerClickBotonEnviar('josegregorio2@email.com', '100')
-    await expect(page.getByText('Transferencia enviada a josegregorio2@email.com')).toBeVisible({ timeout: 10000 });
+    await modalEnviarTransferencia.completarYHacerClickBotonEnviar(emailRecibe, '100')
+    await expect(page.getByText('Transferencia enviada a ' + emailRecibe)).toBeVisible({ timeout: 10000 });
 });
 
 testUsuarioRecibe('TC-13 Verificar que el usuario recibe la transferencia', async ({page}) => {
@@ -67,6 +72,10 @@ const jwtDeUsuarioEnvia = datoDeUsuarioEnviaAuth.origins[0]?.localStorage.find((
 expect(jwtDeUsuarioEnvia, 'No se pudo obtener el token JWT del usuario que envia dinero').toBeDefined();
 const jwt = jwtDeUsuarioEnvia.value;
 
+const usuarioRecibeDataFile = require.resolve('../playwright/.auth/usuarioRecibe.data.json');
+const usuarioRecibeContenido = await fs.readFile(usuarioRecibeDataFile, 'utf-8');
+const emailRecibe = JSON.parse(usuarioRecibeContenido).email;
+
 // #2 Accion: Obtener Cuenta y Enviar transferencia por API
 
 // Primero obtenemos la cuenta del remitente para saber el ID de origen.
@@ -91,7 +100,7 @@ const respuestaTransferencia = await request.post('http://localhost:6007/api/tra
     },
     data: {
         fromAccountId: idCuentaOrigen,
-        toEmail: TestData.usuarioValido.email,
+        toEmail: emailRecibe,
         amount: montoAleatorio
     }
 });

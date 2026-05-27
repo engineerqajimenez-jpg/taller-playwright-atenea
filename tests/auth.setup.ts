@@ -44,20 +44,25 @@ setup('Generar usuario que envia dinero', async ({ page, request }) => {
   await page.context().storageState({ path: usuarioEnviaAuthFile });
 });
 
-setup('Loguearse con usuario que recibe dinero', async ({ page }) => {
-  await loginPage.completarYHacerClickBotonLogin(TestData.usuarioValido);
+setup('Loguearse con usuario que recibe dinero', async ({ page, request }) => {
+  // Crear usuario recibe dinámicamente
+  const nuevoUsuarioRecibe = await backendUtils.crearUsuarioPorApi(request, TestData.usuarioValido);
+
+  await loginPage.completarYHacerClickBotonLogin(nuevoUsuarioRecibe);
   await expect(dashboardPage.dashboardTitle).toBeVisible({ timeout: 30000 });
 
-  // Solo crea cuenta si el botón existe
-  const botonAgregar = dashboardPage.botonDeAgregarCuenta;
-  const visible = await botonAgregar.isVisible();
-  if (visible) {
-    await botonAgregar.click();
-    await modalCrearCuenta.seleccionarTipoDeCuenta('Débito');
-    await modalCrearCuenta.ingresarMontoInicial('500');
-    await modalCrearCuenta.botonCrearCuenta.click();
-    await expect(page.getByText('¡Cuenta creada exitosamente!')).toBeVisible();
-  }
+  // Crear cuenta para el usuarioRecibe
+  await dashboardPage.botonDeAgregarCuenta.click();
+  await modalCrearCuenta.seleccionarTipoDeCuenta('Débito');
+  await modalCrearCuenta.ingresarMontoInicial('500');
+  await modalCrearCuenta.botonCrearCuenta.click();
+  await expect(page.getByText('¡Cuenta creada exitosamente!')).toBeVisible();
+
+  // Guardar email del usuarioRecibe para TC-12 y TC-13
+  await fs.writeFile(
+    'playwright/.auth/usuarioRecibe.data.json',
+    JSON.stringify({ email: nuevoUsuarioRecibe.email })
+  );
 
   await page.context().storageState({ path: usuarioRecibeAuthFile });
 });
