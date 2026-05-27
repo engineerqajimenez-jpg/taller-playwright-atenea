@@ -1,4 +1,4 @@
-import {Page, Locator} from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 
 export class RegisterPage {
   readonly page: Page;
@@ -8,15 +8,15 @@ export class RegisterPage {
   readonly passwordInput: Locator;
   readonly registerButton: Locator;
   readonly loginButton: Locator;
-  
+
   constructor(page: Page) {
-   this.page = page;
-   this.firstNameInput = page.locator ('input[name="firstName"]');
-   this.lastNameInput = page.locator ('input[name="lastName"]');
-   this.emailInput = page.locator ('input[name="email"]');
-   this.passwordInput = page.locator ('input[name="password"]');
-   this.registerButton = page.getByTestId('boton-registrarse');
-   this.loginButton = page.getByTestId('boton-login-header-signup');
+    this.page = page;
+    this.firstNameInput = page.locator('input[name="firstName"]');
+    this.lastNameInput = page.locator('input[name="lastName"]');
+    this.emailInput = page.locator('input[name="email"]');
+    this.passwordInput = page.locator('input[name="password"]');
+    this.registerButton = page.getByTestId('boton-registrarse');
+    this.loginButton = page.getByTestId('boton-login-header-signup');
   }
 
   async visitarPaginaRegistro() {
@@ -24,7 +24,12 @@ export class RegisterPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async completarFormularioRegistro(usuario: {firstName: string; lastName: string; email: string; password: string;}) {
+  async completarFormularioRegistro(usuario: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }) {
     await this.firstNameInput.fill(usuario.firstName);
     await this.lastNameInput.fill(usuario.lastName);
     await this.emailInput.fill(usuario.email);
@@ -35,8 +40,13 @@ export class RegisterPage {
     await this.registerButton.click();
   }
 
-  async completarYHacerClickBotonRegistro(usuario: {firstName: string; lastName: string; email: string; password: string;}) {
-    this.completarFormularioRegistro(usuario);
+  async completarYHacerClickBotonRegistro(usuario: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }) {
+    await this.completarFormularioRegistro(usuario); // ← await agregado
     await this.hacerclickBotonRegistro();
   }
 }

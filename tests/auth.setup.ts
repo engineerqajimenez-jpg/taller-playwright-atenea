@@ -40,7 +40,7 @@ setup('Generar usuario que envia dinero', async ({ page, request }) => {
     JSON.stringify({ email: nuevoUsuario.email })
   );
 
-  // Guarda sesión AL FINAL
+  // Guarda sesión AL FINAL — después del login y crear cuenta
   await page.context().storageState({ path: usuarioEnviaAuthFile });
 });
 
@@ -48,6 +48,12 @@ setup('Loguearse con usuario que recibe dinero', async ({ page }) => {
   await loginPage.completarYHacerClickBotonLogin(TestData.usuarioValido);
   await expect(dashboardPage.dashboardTitle).toBeVisible({ timeout: 30000 });
 
-  // Guarda sesión del usuario que recibe
+  // ← AGREGAR ESTO — crear cuenta para el usuarioRecibe
+  await dashboardPage.botonDeAgregarCuenta.click();
+  await modalCrearCuenta.seleccionarTipoDeCuenta('Débito');
+  await modalCrearCuenta.ingresarMontoInicial('500');
+  await modalCrearCuenta.botonCrearCuenta.click();
+  await expect(page.getByText('¡Cuenta creada exitosamente!')).toBeVisible();
+
   await page.context().storageState({ path: usuarioRecibeAuthFile });
 });

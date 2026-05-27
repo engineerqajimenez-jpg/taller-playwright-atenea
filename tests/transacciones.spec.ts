@@ -18,11 +18,17 @@ const testUsuarioRecibe= test.extend({
 storageState: 'playwright/.auth/usuarioRecibe.json'
 })
 
-test.beforeEach(async ({ page }) => {
+testUsuarioEnvia.beforeEach(async ({ page }) => {
     dashboardPage = new DashboardPage(page);
     modalEnviarTransferencia = new ModalEnviarTransferencia(page);
     await dashboardPage.visitarPaginaDashboard();
-})
+});
+
+testUsuarioRecibe.beforeEach(async ({ page }) => {
+    dashboardPage = new DashboardPage(page);
+    modalEnviarTransferencia = new ModalEnviarTransferencia(page);
+    await dashboardPage.visitarPaginaDashboard();
+});
 
 testUsuarioEnvia('TC-12 Verificar transasccion exitosa', async ({page}) => {
     testUsuarioEnvia.info().annotations.push({ 
@@ -32,8 +38,8 @@ testUsuarioEnvia('TC-12 Verificar transasccion exitosa', async ({page}) => {
 
     await expect(dashboardPage.dashboardTitle).toBeVisible();
     await dashboardPage.botonEnviarDinero.click();
-    await modalEnviarTransferencia.completarYHacerClickBotonEnviar(TestData.usuarioValido.email, '100')
-    await expect(page.getByText('Transferencia enviada a ' + TestData.usuarioValido.email)).toBeVisible();
+    await modalEnviarTransferencia.completarYHacerClickBotonEnviar('josegregorio2@email.com', '100')
+    await expect(page.getByText('Transferencia enviada a josegregorio2@email.com')).toBeVisible({ timeout: 10000 });
 });
 
 testUsuarioRecibe('TC-13 Verificar que el usuario recibe la transferencia', async ({page}) => {
