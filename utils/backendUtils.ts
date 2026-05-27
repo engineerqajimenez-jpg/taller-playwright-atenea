@@ -6,7 +6,9 @@ export class backendUtils {
     request: APIRequestContext,
     usuario: { firstName: string; lastName: string; email: string; password: string }
   ) {
-    const email = usuario.email.split('@')[0] + Date.now().toString() + '@' + usuario.email.split('@')[1];
+    const baseEmail = usuario.email.split('@')[0].replace(/\d+$/, '');
+    const domain = usuario.email.split('@')[1].split('.')[0];
+    const email = baseEmail + Date.now().toString() + '@' + domain + '.com';
     const response = await request.post('http://localhost:6007/api/auth/signup/', {
       headers: {
         'accept': 'application/json',

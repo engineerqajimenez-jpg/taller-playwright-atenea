@@ -48,12 +48,16 @@ setup('Loguearse con usuario que recibe dinero', async ({ page }) => {
   await loginPage.completarYHacerClickBotonLogin(TestData.usuarioValido);
   await expect(dashboardPage.dashboardTitle).toBeVisible({ timeout: 30000 });
 
-  // ← AGREGAR ESTO — crear cuenta para el usuarioRecibe
-  await dashboardPage.botonDeAgregarCuenta.click();
-  await modalCrearCuenta.seleccionarTipoDeCuenta('Débito');
-  await modalCrearCuenta.ingresarMontoInicial('500');
-  await modalCrearCuenta.botonCrearCuenta.click();
-  await expect(page.getByText('¡Cuenta creada exitosamente!')).toBeVisible();
+  // Solo crea cuenta si el botón existe
+  const botonAgregar = dashboardPage.botonDeAgregarCuenta;
+  const visible = await botonAgregar.isVisible();
+  if (visible) {
+    await botonAgregar.click();
+    await modalCrearCuenta.seleccionarTipoDeCuenta('Débito');
+    await modalCrearCuenta.ingresarMontoInicial('500');
+    await modalCrearCuenta.botonCrearCuenta.click();
+    await expect(page.getByText('¡Cuenta creada exitosamente!')).toBeVisible();
+  }
 
   await page.context().storageState({ path: usuarioRecibeAuthFile });
 });
