@@ -25,3 +25,57 @@ End-to-end test automation suite for **Redux Athena Bank**, a full-stack banking
 
 ### 🚀 Run Locally
 ```bash
+npm install
+npx playwright install chromium
+npx playwright test --project=setup
+npx playwright test --project=chromium
+```
+
+### 📊 CI/CD Pipeline
+Every push to `main` automatically:
+1. Starts MongoDB, Backend and Frontend
+2. Runs all 16 tests
+3. Publishes HTML report to GitHub Pages
+
+---
+
+## 🇪🇸 Español
+
+### Descripción
+Suite de automatización end-to-end para **Redux Athena Bank**, una aplicación bancaria full-stack. Desarrollada con **Playwright** y **TypeScript**, con integración CI/CD en GitHub Actions y publicación automática de reportes en GitHub Pages.
+
+### 🔗 Reporte en Vivo
+👉 [Ver Último Reporte de Playwright](https://engineerqajimenez-jpg.github.io/taller-playwright-atenea/report-51/)
+
+### ✅ Cobertura — 16 Casos de Prueba
+| Archivo | Casos de Prueba |
+|---------|----------------|
+| `registro.spec.ts` | TC-1 al TC-9 — Flujo de registro |
+| `login.spec.ts` | TC-7, TC-11 — Flujo de login |
+| `transacciones.spec.ts` | TC-12 al TC-14 — Transacciones |
+
+### 🛠️ Tecnologías
+- **Playwright** + **TypeScript**
+- **Page Object Model (POM)**
+- **storageState** para autenticación de múltiples usuarios
+- **GitHub Actions** CI/CD
+- **GitHub Pages** para publicación automática de reportes
+- **MongoDB** + **Node.js** backend (levantado automáticamente en CI/CD)
+
+### 🚀 Ejecutar Localmente
+```bash
+npm install
+npx playwright install chromium
+npx playwright test --project=setup
+npx playwright test --project=chromium
+```
+
+### 📊 Pipeline CI/CD
+Cada push a `main` automáticamente:
+1. Levanta MongoDB, Backend y Frontend
+2. Corre los 16 tests
+3. Publica el reporte HTML en GitHub Pages
+
+---
+
+**Author / Autor:** Jose Jimenez — [LinkedIn](https://www.linkedin.com/in/jose-jimenez-qa) | [GitHub](https://github.com/engineerqajimenez-jpg)
