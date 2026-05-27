@@ -1,9 +1,14 @@
-{ 
+{
     "usuarioValido": {
-    
-      "firstName": "Jose",
-      "lastName": "Jimenez",
-      "email": "josegregorio@email.com",
-      "password": "123456"
+        "firstName": "Jose",
+        "lastName": "Jimenez",
+        "email": "josegregorio@email.com",
+        "password": "123456"
+    },
+    "usuarioRecibe": {
+        "firstName": "Maria",
+        "lastName": "Lopez",
+        "email": "marialopez@email.com",
+        "password": "123456"
     }
 }

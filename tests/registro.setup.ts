@@ -38,8 +38,9 @@ await page.context().storageState({ path: 'playwright/.auth/usuarioEnvia.json' }
   await page.context().storageState({ path: usuarioEnviaAuthFile });
 });
 
-setup('Loguearse con usuario que recibe dinero', async ({ page }) => {
-  await loginPage.completarYHacerClickBotonLogin(TestData.usuarioValido);
+setup('Loguearse con usuario que recibe dinero', async ({ page, request }) => {
+  const nuevoUsuario = await backendUtils.crearUsuarioPorApi(request, TestData.usuarioRecibe);
+  await loginPage.completarYHacerClickBotonLogin(nuevoUsuario);
   await expect(dashboardPage.dashboardTitle).toBeVisible({ timeout: 15000 });
   await page.context().storageState({ path: usuarioRecibeAuthFile });
 });
