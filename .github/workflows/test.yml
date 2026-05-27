@@ -93,9 +93,15 @@ jobs:
         cd $RUNNER_TEMP
         git clone --depth=1 --branch=gh-pages https://x-access-token:${{ secrets.GH_PAGES_PAT }}@github.com/${{ github.repository }}.git gh-pages-dir
         cd gh-pages-dir
-        rm -rf ./*
         mkdir -p report-${{ github.run_number }}
         cp -r $GITHUB_WORKSPACE/playwright-report/* ./report-${{ github.run_number }}/
+
+        # Generar index.html con lista de reportes
+        echo '<html><body><h1>Playwright Reports</h1><ul>' > index.html
+        for dir in report-*/; do
+        echo "<li><a href='${dir}index.html'>${dir}</a></li>" >> index.html
+        done
+        echo '</ul></body></html>' >> index.html
         git add .
         git commit -m "📊 Reporte Playwright - Build ${{ github.run_number }}"
         git push origin gh-pages
